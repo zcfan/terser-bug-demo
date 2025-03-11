@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:esbuild": "esbuild fix.js --minify --outfile=\"esbuild-output.js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "esbuild": "^0.25.1",
     "terser": "^5.39.0"
   }
 }
