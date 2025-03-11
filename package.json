@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:terser": "terser before.js --output=after.js --compress module=true,inline=false",
-    "build:terser:fixed": "terser before.js --output=after.js --compress module=true,reduce_vars=false"
+    "build": "terser before.js --output=after.js --compress module=true,inline=false",
+    "build:fixed": "terser before.js --output=after.js --compress module=true,reduce_vars=false"
   },
   "keywords": [],
   "author": "",

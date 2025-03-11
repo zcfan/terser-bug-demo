@@ -1,38 +1,38 @@
 # Demo of memory leaks after terser minifying
 
-## Before fix, the `leaks.js` leaks
+Credit to [this blog post](https://blog.meteor.com/an-interesting-kind-of-javascript-memory-leak-8b47d2e7f156).
 
-The `leaks.js` leaks memory every 1 second. (Credit to [this blog post](https://blog.meteor.com/an-interesting-kind-of-javascript-memory-leak-8b47d2e7f156))
+Input is not leaking, `--compress module=true,inline=false` is combination of safe options, but result in memory leaks.
+
+## `before.js` does not leak.
 
 To verify it, run the following command:
 
 ```
-$ node --inspect leaks.js
+$ node --inspect before.js
 ```
 
 Open `chrome://inspect` and record a memory timeline.
 
-![](leaks-timeline.png)
+## After minifying, the `after.js` leaks.
 
-## After fix, the `fix.js` doesn't leak
-
-Look at `fix.js` to see how it is fixed by extracting the inner function declaration into module scope.
-
-You can verify it by memory timeline again.
-
-## But `fix.js` leaks again after terser minifying
-
-Minify `fix.js` by terser with "--compress module=true" option:
-```bash
-$ npm run build:terser
+```
+$ npm build
+$ node --inspect after.js
 ```
 
-Look at `terser-output.js` to see how terser moves the `fix` function from module scope to inner of the `replaceThing` function. Which reverts the fix.
+Open `chrome://inspect` and record a memory timeline.
 
-I found that if you run terser with `--compress module=true,reduce_funcs=false` option, it doesn't leak.
+![](leaks.png)
 
-```bash
-$ npm run build:terser:fixed
+## With `reduce_vars=false` the `after.js` does not leak.
+
+
+```
+$ npm build:fixed
+$ node --inspect after.js
 ```
 
-It seem both `module` and `reduce_funcs` options are not labeled as "unsafe", but together they could break the code.
+Open `chrome://inspect` and record a memory timeline.
+
+![](fixed.png)
