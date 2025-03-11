@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:esbuild": "esbuild fix.js --minify --outfile=\"esbuild-output.js\""
+    "build:terser": "terser before.js --output=after.js --compress module=true,inline=false",
+    "build:terser:fixed": "terser before.js --output=after.js --compress module=true,reduce_vars=false"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "esbuild": "^0.25.1",
     "terser": "^5.39.0"
   }
 }

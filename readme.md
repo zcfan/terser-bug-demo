@@ -22,14 +22,17 @@ You can verify it by memory timeline again.
 
 ## But `fix.js` leaks again after terser minifying
 
-Look at `minify.js` to see how it is being minified, and `output.js` to see the result of minifying.
+Minify `fix.js` by terser with "--compress module=true" option:
+```bash
+$ npm run build:terser
+```
 
-terser moves the `fix` function from module scope to inner of the `replaceThing` function. which revert the fix.
+Look at `terser-output.js` to see how terser moves the `fix` function from module scope to inner of the `replaceThing` function. Which reverts the fix.
 
-# Conclusion
+I found that if you run terser with `--compress module=true,reduce_funcs=false` option, it doesn't leak.
 
-This behavior is dangerous because it transform a healthy code into a leaking one.
+```bash
+$ npm run build:terser:fixed
+```
 
-I don't know which options can I use to disable it, please help.
-
-Even if it is able to be disabled by options, it is still dangerous because it should not be default.
+It seem both `module` and `reduce_funcs` options are not labeled as "unsafe", but together they could break the code.
